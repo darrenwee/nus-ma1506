@@ -1,0 +1,333 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{hyperref}
+\usepackage{amssymb,amsmath}
+\usepackage{amsthm}
+\usepackage{graphicx}
+
+% To make this come out properly in landscape mode, do one of the following
+% 1.
+%  pdflatex latexsheet.tex
+%
+% 2.
+%  latex latexsheet.tex
+%  dvips -P pdf  -t landscape latexsheet.dvi
+%  ps2pdf latexsheet.ps
+
+
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.4in,left=.4in,right=.4in,bottom=.4in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=0.5cm,left=0.5cm,right=0.5cm,bottom=0.5cm} }
+		{\geometry{top=0.5cm,left=0.5cm,right=0.5cm,bottom=0.5cm} }
+	}
+
+% Turn off header and footer
+\pagestyle{empty}
+
+% Change hyperlinks to something slightly more elegant
+\hypersetup{
+	colorlinks = true,
+	linkcolor=blue,
+} 
+
+% Set up remark environment with amsthm
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{theorem}{Theorem}
+
+% set up some new operators with amsmath
+\DeclareMathOperator{\Lapl}{\mathcal{L}}
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+     \Large{\textbf{$\mathbb{MA}1506$ Cheat Sheet}} \\
+\end{center}
+
+\section{Ordinary Differential Equations}
+\subsection{Linear First-Order ODE}
+The standard form for linear first-order ODEs are:
+\begin{equation}
+	\frac{dy}{dx} + p(x)y = r(x)
+\end{equation}
+
+The integrating factor $\mu(t)$ is given by
+\begin{equation}
+	\mu(t) = e^{\int p(x) dx}
+\end{equation}
+
+\subsection{Bernoulli Equations}
+Bernoulli equations have the standard form:
+\begin{equation}
+	y' + p(x)y = q(x)y^n, n\in\mathbb{R}
+	\label{eqn:bernoulli}
+\end{equation}
+
+When $n=0,1$, the equation is linear and we can solve it using the integrating factor.
+However, for other values of $n$, it is necessary to reduce the equation to linear form.
+
+First, divide Equation \ref{eqn:bernoulli} by $y^n$.
+We will use the substitution $v=y^{1-n}$, such that the derivative $\frac{dv}{dx} = (1-n)y^{-n}y'$.
+We then obtain the following:
+\begin{equation}
+	\frac{1}{1-n}v' + p(x)v = q(x)
+\end{equation}
+
+\subsection{Second-Order ODE}
+The standard form for second-order ODEs is:
+\begin{equation}
+	\frac{d^2y}{dx^2} + p(x)\frac{dy}{dy} + q(x)y = F(x)
+\end{equation}
+
+If $F(x) \equiv 0$, the equation is \emph{homogenous}. Otherwise, it is \emph{nonhomogenous}.
+
+A solution of a second-order ODE on some interval $I$ is a function $y=h(x)$ with derivatives $y'=h'(x)$ and $y''=h''(x)$ satisfying the ODE $\forall x$ in $I$.
+
+\subsubsection{Homogeous Second-Order ODEs}
+\begin{equation}
+	\frac{d^2y}{dx^2} + p(x)\frac{dy}{dy} + q(x)y = 0
+	\label{eqn:homo_so_ode}
+\end{equation}
+
+Any \underline{linear} combination of two solutions for Equation \ref{eqn:homo_so_ode} on an open interval $I$ is also a solution on $I$, i.e. sums and constant multiples of solutions are also themselves solutions.
+
+\begin{remark}
+	The above is not true for nonhomogeous equations.
+\end{remark}
+
+As it is a solution to $y' + ky = 0, k\in\mathbb{R}$, we thus find that $y=e^{\lambda x}$ is also a solution to Equation \ref{eqn:homo_so_ode} if $\lambda$ is a solution to Equation \ref{eqn:characteristic}.
+
+\begin{equation}
+	\lambda^2+a\lambda+b = 0
+	\label{eqn:characteristic}
+\end{equation}
+
+\subsubsection{Case 1: two real solutions $\lambda_1$ and $\lambda_2$}
+In this case, the solutions to the ODE are $e^{\lambda_1 x}$ and $e^{\lambda_2 x}$ which are linearly independent solutions on any interval.
+
+The corresponding general solution is thus given by
+\begin{equation}
+	y=c_1 e^{\lambda_1 x} + c_2 e^{\lambda_2 x}
+\end{equation}
+
+\subsubsection{Case 2: one real solution $\lambda$}
+The corresponding general solution is given by
+\begin{equation}
+	y = c_1 e^{\lambda x} + c_2 x e^{\lambda x}
+\end{equation}
+
+\subsubsection{Case 3: complex solutions $\lambda \pm \mu i$}
+The corresponding general solution is given by
+\begin{equation}
+	y = c_1 e^{\lambda x}\cos{\mu x} + c_2e^{\lambda x}\sin{\mu x}
+\end{equation}
+
+\subsubsection{Nonhomogenous Second-Order ODEs}
+\begin{theorem}
+	The general solution of the nonhomogenous differential equation $p(x)y'' + q(x)y' + r(x)y = G(x)$ can be written as:
+	$$ y(x) = y_p(x) + y_c(x) $$
+	where $y_p(x)$ is a particular solution of Equation $p(x)y''+q(x)y'+r(x)y=G(x)$ and $y_c(x)$ is the general solution of the \emph{complementary} equation $p(x)y''+b'+r(x)y=0$.
+\end{theorem}
+
+\subsubsection{Method of Undetermined Coefficients}
+$$y'' + p(x)y' + q(x)y = r(x)$$
+Guess Table
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}rl@{}}
+	\hline
+	$r(x)$			& Guess		\\\hline
+	$k\in\mathbb{R}$& $A$ \\
+	$5x+7$			& $Ax+B$ \\
+	$3x^2-2$		& $Ax^2+Bx+C$ \\
+	$\sin{4x}$		& $A\cos{4x}+B\sin{4x}$ \\
+	$\cos{4x}$		& $A\cos{4x}+B\sin{4x}$ \\
+	$e^{5x}$		& $Ae^{5x}$ \\
+	$(9x-2)e^{5x}$	& $(Ax+B)e^{5x}$ \\
+	$x^2e^{5x}$		& $(Ax^2+Bx+C)e^{5x}$ \\
+	$e^{3x}\sin{4x}$& $Ae^{3x}\cos{4x} + Be^{3x}\sin{4x}$ \\
+	$5x^2\sin{4x}$	& $(Ax^2+Bx+C)\cos{4x} + (Ex^2+Fx+G)\sin{4x}$ \\
+	$xe^{3x}\cos{4x}$& $(Ax+B)e^{3x}\cos{4x} + (Cx+E)e^{3x}\sin{4x}$ \\
+	$(5x+7)+\sin{4x}$& $(Ax+B)+(C\cos{4x}+D\sin{4x})$ \\\hline
+\end{tabular}}
+
+\subsubsection{Variation of Parameters}
+$$y'' + p(x)y' + q(x)y = r(x)$$
+As above, the theorem for the general solution holds and we find the complementary solution $y_c(x) = c_1y_1(x) + c_2y_2(x)$.
+
+Now let us define a pair of functions $u(x)$ and $v(x)$ such that
+\begin{equation}
+	y_p(x) = u(x)y_1(x) + v(x)y_2(x)
+\end{equation}
+
+\begin{equation}
+	u'(x)y_1(x) + v'(x)y_2(x) = 0
+	\label{eqn:variation1}
+\end{equation}
+
+\begin{align}
+	y_p'(x) 	& = u(x)y_1'(x) + v(x)y_2'(x) \\
+	y_p''(x) 	& = u'(x)y_1'(x) + u(x)y_1'(x) + v'(x)y_2'(x) + v(x)y_2''(x)
+\end{align}
+
+\begin{align}
+	u'(x) & = -\frac{y_2(x)r(x)}{y_1(x)y_2'(x) - y_1'(x)y_2(x)}\\
+	v'(x) & = \frac{y_1(x)r(x)}{y_1(x)y_2'(x) - y_1'(x)y_2(x)}\\
+\end{align}
+
+Thereafter, we can obtain $u(x)$ and $v(x)$ by integration.
+The constant of integration in $u(x)$ and $v(x)$ can be ignored.
+
+\section{Mathematical Modelling}
+\subsection{Euler's Bending Equation}
+Suppose a cantilevered beam with a Young's modulus $E$, a distributed load across its length $w(x)$ and a deflection $v(x)$ as functions of horizontal position.
+\begin{equation}
+	\frac{d^2}{dx^2}\Big[ EI_z \frac{d^2v}{dx^2}  \Big] = w(x)
+\end{equation}
+
+\subsection{Malthus Model of Population}
+For a population of initial size $P_0$ with size $P(t)$ at time $t$, and a population growth rate $r = \text{birth rate} - \text{death rate}$,
+\begin{equation}
+	P(t) = P_0 e^{rt}
+\end{equation}
+\begin{tabular}{rl}
+	\hline
+	$r < 0$ & population collapse (more deaths than births per capita) \\\hline
+	$r = 0$ & remains stable (if and only if) \\\hline
+	$r > 0$ & population explosion (more births than deaths per capita)\\\hline
+\end{tabular}
+
+\section{Laplace Transform}
+Let $f$ be a function defined for $t \geq 0$.
+The Laplace transform of $f$ is the function $F(s)$, where
+\begin{equation}
+	F(s) = \Lapl(f) = \int_0^\infty e^{-st} f(t)\: dt
+\end{equation}
+
+\begin{theorem}
+	For some $a,b\in\mathbb{R}$,
+	$$\Lapl(af(t)+bg(t)) = a\Lapl(f) + b\Lapl(g)$$
+
+	This is also true for the inverse Laplace transform.
+\end{theorem}
+
+\begin{remark}
+The Laplace transform is independent of whether the target function is continuous or not.
+\end{remark}
+
+\begin{theorem}
+	Suppose the continuous function $f(t)$ has a well-defined Laplace transform on $[0,\infty)$ and $f'(t)$ is piecewise-continuous on $[0,\infty)$.
+	Thus, $\Lapl(f'(t))$ exists, and the following is true for $s>a$:
+	$$\Lapl(f'(t)) = s\Lapl(f) - f(0)$$
+\end{theorem}
+
+Some useful identities:
+\begin{align}
+	\Lapl(\cos{\omega t}) = \frac{s}{s^2+\omega^2} \qquad \Lapl(\sin{\omega t}) = \frac{\omega}{s^2+\omega^2} 
+\end{align}
+
+\begin{tabular}{@{}ll@{}}
+\end{tabular}
+
+\section{Trigonometric Identities}
+\subsection{Hyperbolic Functions}
+$$\sinh{x} = \frac{e^x-e^{-x}}{2} = \frac{e^{2x}-1}{2e^x} = \frac{1-e^{-2x}}{2e^{-x}}$$
+$$\cosh{x} = \frac{e^x + e^{-x}}{2} = \frac{e^{2x}+1}{2e^x} = \frac{1+e^{-2x}}{2e^{-x}}$$
+$$\tanh{x} = \frac{\sinh{x}}{\cosh{x}} = \frac{e^x-e^{-x}}{e^x+e^{-x}}$$
+
+\subsection{Pythagorean Identities}
+$$\sin^2{u} + \cos^2{u} = 1$$
+$$1+\tan^2{u} = \sec^2{u}$$
+$$1+\cot^2{u} = \csc^2{u}$$
+
+\subsection{Sum and Difference Formulae}
+$$\sin(u\pm v) = \sin{u}\cos{v} \pm \cos{u}\sin{v}$$
+$$\cos(u\pm v) = \cos{u}\cos{v} \mp \sin{u}\sin{v}$$
+$$\tan(u\pm v) = \frac{\tan{u}\pm\tan{v}}{1\mp\tan{u}\tan{v}}$$
+
+\subsection{Double Angle Formulae}
+$$\sin{2u} = 2\sin{u}\cos{u}$$
+$$\cos{2u} = \cos^2{u} - \sin^2{u} = 2\cos^2{u} - 1 = 1-2\sin^2{u}$$
+$$\tan{2u} = \frac{2\tan{u}}{1-\tan^2{u}}$$
+
+\subsection{Half Angle Identities}
+$$\sin^2{u} = \frac{1-\cos{2u}}{2}$$
+$$\cos^2{u} = \frac{1+\cos{2u}}{2}$$
+$$\tan^2{u} = \frac{1-\cos{2u}}{1+\cos{2u}}$$
+
+\subsection{Sum $\to$ Product Identities}
+$$\sin{u} + \sin{v} = 2\sin{\frac{u+v}{2}}\cos{\frac{u-v}{2}}$$
+$$\sin{u} - \sin{v} = 2\cos{\frac{u+v}{2}}\sin{\frac{u-v}{2}}$$
+$$\cos{u} + \cos{v} = 2\cos{\frac{u+v}{2}}\cos{\frac{u-v}{2}}$$
+$$\cos{u} - \cos{v} = -2\sin{\frac{u+v}{2}}\sin{\frac{u-v}{2}}$$
+
+\subsection{Product $\to$ Sum Identities}
+$$\sin{u}\sin{v} = \frac{1}{2} [\cos{(u-v)} - \cos{(u+v)}]$$
+$$\cos{u}\cos{v} = \frac{1}{2} [\cos{(u-v)} + \cos{(u+v)}]$$
+$$\sin{u}\cos{v} = \frac{1}{2} [\sin{(u+v)} + \sin{(u-v)}]$$
+$$\cos{u}\sin{v} = \frac{1}{2} [\sin{(u+v)} - \sin{(u-v)}]$$
+
+\subsection{Parity Identities}
+$$\sin{(-u)} = -\sin{u}$$
+$$\cos{(-u)} = \cos{u}$$
+$$\tan{(-u)} = -\tan{u}$$
+
+$$\cot{(-u)} = -\cot{u}$$
+$$\csc{(-u)} = -\csc{u}$$
+$$\sec{(-u)} = \sec{u}$$
+
+{\hfill \texttt{darren.wee@u.nus.edu}}
+
+{\hfill \texttt{Updated \today.}}
+\end{multicols}
+\end{document}
