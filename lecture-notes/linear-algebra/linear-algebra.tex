@@ -362,9 +362,289 @@ It is necessary to ensure that the transformations on the right are able to take
 
 \begin{equation}
 	\begin{vmatrix}
-	a & b & c \\
-	d & e & f \\
-	h & l & m 
+	a_{11} & a_{12} & a_{13} \\
+	a_{21} & a_{22} & a_{23} \\
+	a_{31} & a_{32} & a_{33} 
+	\end{vmatrix}
+	=
+	a_{11}
+	\begin{vmatrix}
+	a_{22} & a_{23} \\
+	a_{32} & a_{33}
+	\end{vmatrix}
+	-a_{12}
+	\begin{vmatrix}
+	a_{21} & a_{23} \\
+	a_{31} & a_{33}
+	\end{vmatrix}
+	+a_{13}
+	\begin{vmatrix}
+	a_{21} & a_{22} \\
+	a_{31} & a_{32}
 	\end{vmatrix}
 \end{equation}
+
+The above can be derived by going through each element in the first row, and striking out all the elements in the same row and column as that element.
+
+\subsubsection{Basic Properties}
+\begin{theorem}
+	Let $S$ and $T$ be two linear transformations with determinants $\det{S}$ and $\det{T}$ respectively.
+	\begin{equation}
+		\det{ST} = \det{TS} = (\det{S}) \times (\det{T})
+	\end{equation}
+
+	i.e. the determinant of a product of composite linear transformations is independent of the order of those linear transformations.
+\end{theorem}
+
+\begin{theorem}
+	If $M$ is a square matrix, then
+	\begin{equation}
+		\det{M^T} = \det{M}
+	\end{equation}
+\end{theorem}
+
+\begin{theorem}
+	If $c\in\mathbb{R}$ and $M$ is an $n\times n$ matrix, then
+	\begin{equation}
+		\det{cM} = c^n\det{M}
+	\end{equation}
+\end{theorem}
+
+\begin{theorem}
+	For an identity matrix $I$ of any size,
+	\begin{equation}
+		\det{I} = 1
+	\end{equation}
+\end{theorem}
+
+\begin{theorem}
+	Suppose an orthogonal matrix $M$ satisfies $MM^T = I$.
+	\begin{align}
+		\det{MM^T} 	& = \det{M}\det{M^T} \\
+					& = (\det{M})^2 \\
+					& = 1 \\
+		\det{M} 	& = \pm 1
+	\end{align}
+	
+	This is true for any orthogonal matrix $M$.
+\end{theorem}
+
+\begin{theorem}
+	Let $T$ be some linear transformation. Suppose the following:
+	\begin{equation}
+		T\vec{w} = \vec{0}
+	\end{equation}
+
+	$\vec{w}$ is \textbf{not} the zero vector.
+\end{theorem}
+
+\subsection{Inverses}
+Any linear transformation must map a vector to a single resultant vector.
+Multiple input vectors can map to the same resultant vector.
+
+\subsubsection{Singular Linear Transformation}
+Suppose a linear transformation $T$ that is singular.
+
+$T$ thus meets the following conditions:
+\begin{enumerate}
+	\item maps 2 different vectors to 1 vector
+	\item destroys all of the vectors in $\geq$ 1 direction
+	\item loses all information associated with those directions
+	\item $\det{T} = 0$
+\end{enumerate}
+
+Singular transformations \textbf{do not} have inverses.
+
+\begin{example}
+	Suppose a linear transformation $T = \begin{bmatrix} 1 & 1 \\ 1 & 1\end{bmatrix}$.
+
+	\begin{equation}
+		\begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix}
+		\begin{bmatrix} 3 \\ 4\end{bmatrix}
+		=
+		\begin{bmatrix} 7 \\ 7\end{bmatrix}
+	\end{equation}
+	\begin{equation}
+		\begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix}
+		\begin{bmatrix} 4 \\ 3\end{bmatrix}
+		=
+		\begin{bmatrix} 7 \\ 7\end{bmatrix}
+	\end{equation}
+
+	The determinant of the linear transformation is exactly 0, i.e. $\det{T} = 0$.
+\end{example}
+
+\subsubsection{Non-Singular Linear Transformation}
+A non-singular transformation \textbf{never} maps 2 vectors to 1.
+
+For some linear transformation $T$ and a vector $\vec{u}$, $T(\vec{u})$ maps to exactly one unique vector $\vec{v}$.
+
+There is thus some operation $T^{-1}$ that maps $\vec{v}$ back to $\vec{u}$, i.e. $T^{-1}(\vec{v}) = \vec{u}$.
+$T^{-1}$ can only exist if and only if $\det{T} \neq 0$.
+
+\begin{example}
+	Suppose a linear transformation $\begin{bmatrix} 0 & -1 \\ 1 & 0\end{bmatrix}$ that acts on vectors $\begin{bmatrix} \alpha \\ \beta\end{bmatrix}$ and $\begin{bmatrix} a \\ b \end{bmatrix}$.
+	\begin{equation}
+		\begin{bmatrix} 0 & -1 \\ 1 & 0\end{bmatrix}
+		\begin{bmatrix} \alpha \\ \beta \end{bmatrix}
+		=
+		\begin{bmatrix} 0 & -1 \\ 1 & 0\end{bmatrix}
+		\begin{bmatrix} a \\ b \end{bmatrix}
+	\end{equation}
+	
+	This works out to $\begin{bmatrix} \alpha \\ \beta\end{bmatrix} = \begin{bmatrix} a \\ b\end{bmatrix}$, so the two vectors are the same.
+
+	Ergo, this transformation never maps two different vectors to the same resultant vector --- no information is lost and $\det{T} \neq 0$.
+\end{example}
+
+\begin{theorem}
+	\begin{equation}
+		T^{-1}(T(\vec{u})) = \vec{u} = T(T^{-1}(\vec{u}))
+	\end{equation}
+\end{theorem}
+
+\begin{theorem}
+	\begin{equation}
+		T^{-1}T = TT^{-1} = I
+	\end{equation}
+\end{theorem}
+
+\subsubsection{Calculating the Inverse}
+The inverse of any matrix $\begin{bmatrix} a & b \\ c & d\end{bmatrix}$ can be easily calculated by
+\begin{equation}
+	\begin{bmatrix} a & b \\ c & d\end{bmatrix}
+	=
+	\frac{1}{ad-bc}\begin{bmatrix} d & -b \\ -c & a\end{bmatrix}
+\end{equation}
+
+\begin{theorem}
+	\begin{equation}
+		(AB)^{-1} = B^{-1}A^{-1}
+	\end{equation}
+	Note the order of $A$ and $B$.
+\end{theorem}
+
+This notion of an inverse can be used to solve systems of linear equations.
+
+\begin{example}
+	Any system of linear equations can be written as
+	\begin{equation}
+		M\vec{r} = \vec{a}
+	\end{equation}
+	where $M$ is a matrix, $\vec{r}$ is a vector of variables and $\vec{a}$ is a vector of coefficients for the linear system.
+	
+	If $\det{M} \neq 0$, then there is exactly one unique solution
+	\begin{equation}
+		\vec{r} = M^{-1}\vec{a}
+	\end{equation}
+
+	If $\det{M} = 0$, then there is either no solution or infinitely many solutions.
+\end{example}
+
+\subsection{Eigenvectors \& Eigenvalues}
+Most linear transformations usually change the direction of a vector.
+However, there are some special vectors that remain invariant even after a linear transform.
+These vectors are known as \emph{eigenvectors}.
+
+\begin{theorem}
+	In general, if a transformation $T$ does not change the direction of a vector $\vec{u}$, i.e. 
+	\begin{equation}
+		T\vec{u} = \lambda\vec{u}
+	\end{equation}
+
+	for some $\lambda\in\mathbb{R}$, then $\vec{u}$ is known as the eigenvector of $T$ and $\lambda$ the eigenvalue of $\vec{u}$.
+
+	As a consequence of this, the null vector $\vec{0}$ is always an eigenvector (the trivial eigenvector).
+\end{theorem}
+
+\begin{example}
+	Suppose a linear transform $\begin{bmatrix} 1 & 2 \\ 2 & -2\end{bmatrix}$.
+
+	\begin{equation}
+		\begin{bmatrix} 1 & 2 \\ 2 & -2\end{bmatrix}
+		\begin{bmatrix} 2 \\ 1\end{bmatrix}
+		=	
+		\begin{bmatrix} 4 \\ 2\end{bmatrix}
+		=
+		2\begin{bmatrix} 2 \\ 1\end{bmatrix}
+	\end{equation}
+
+	The resulting vector from the linear transformation is parallel to its original input vector.
+	Thus, we say that $\begin{bmatrix} 2 \\ 1\end{bmatrix}$ is the eigenvector of the linear transform and $2$ is its eigenvalue.
+\end{example}
+
+\subsubsection{Computing Eigenvectors and Eigenvalues}
+Let $T$ denote a linear transformation, $\vec{u}$ denote an eigenvector and $\lambda$ its eigenvalue.
+We assume that $\vec{u} \neq \vec{0}$ to eliminate the trivial case.
+The following equation is thus taken to be true.
+\begin{equation}
+	T\vec{u} = \lambda\vec{u}
+\end{equation}
+
+If we let $\vec{u} = I\vec{u}$, where $I$ denotes the identity matrix, then
+\begin{equation}
+	(T-\lambda I)\vec{u} = \vec{0}
+\end{equation}
+
+This means that $T-\lambda I$ is a singular linear transformation as multiple vectors can be mapped to $\vec{0}$, i.e. 
+\begin{equation}
+	\det{(T-\lambda I)} = 0
+\end{equation}
+
+This equation can thus be solved to find $\lambda$.
+
+\begin{example}
+	Find the eigenvalues of $\begin{bmatrix} 1 & 2 \\ 2 & -2\end{bmatrix}$.
+
+	\begin{align}
+		\det{(\begin{bmatrix} 1 & 2 \\ 2 & -2\end{bmatrix} - \lambda\begin{bmatrix} 1 & 0 \\ 0 & 1\end{bmatrix})} = 0 \\
+		\det{\begin{bmatrix} 1-\lambda & 2 \\ 2 & -2-\lambda\end{bmatrix}} = 0 \\
+		-(-1-\lambda)(2+\lambda) - 4 = 0
+	\end{align}
+
+	From here we can see that $\lambda = 2$ or $-3$.
+\end{example}
+
+\begin{theorem}
+	In general, there are $n$ eigenvalues for an $n\times n$ linear transformation.
+\end{theorem}
+
+\begin{remark}
+	If $\vec{u}$ is an eigenvector of $T$, then $2\vec{u}$ is also an eigenvector \emph{but with the same eigenvalue}.
+	\begin{equation}
+		T(2\vec{u}) = 2T(\vec{u}) = 2\lambda\vec{u} = \lambda\times(2\vec{u})
+	\end{equation}
+\end{remark}
+
+Using the calculated eigenvalues from the determinant $=0$ equation, we can find the eigenvectors by simply setting one of the dimensions of the eigenvector to some real number.
+
+\begin{remark}
+	A matrix of real numbers can have complex eigenvalues and eigenvectors.
+\end{remark}
+
+\subsection{Diagonal Form of a Linear Transformation}
+Recall that the matrix of a linear transformation $T$ w.r.t. $\hat{i}, \hat{j}$ and $\hat{k}$ can be defined by a series of concatenated column vectors.
+
+For example, let the linear transformation $T = \begin{bmatrix} a & b \\ c & d\end{bmatrix}$ w.r.t. $\hat{i}$ and $\hat{j}$, i.e.
+\begin{align}
+	T(\hat{i}) = a\hat{i} + c\hat{j} \\
+	T(\hat{j}) = b\hat{i} + d\hat{j}
+\end{align}
+
+We can do this as $\hat{i}$ and $\hat{j}$ are known as \emph{basis vectors}.
+In this case, they are the basis for $\mathbf{R}^2$.
+
+Any vector in $\mathbf{R}^2$ can thus be expressed as a linear combination of these bases $\hat{i}$ and $\hat{j}$.
+This is true for any basis that meet the conditions stated below.
+
+\begin{theorem}
+	Suppose $\vec{u} = P_{11}\hat{i} + P_{21}\hat{j}$ and $\vec{v} = P_{12}\hat{i} + P_{22}\hat{j}$.
+	In order for the vectors $\vec{u},\vec{v}$ to be a basis, the following condition must be met:
+	\begin{equation}
+		\det{P} \neq 0
+	\end{equation}
+
+	In general, any set of $n$ vectors forms a basis in $\mathbf{R}^n$ space provided that the concatenated matrix of those vectors has a non-zero determinant.
+\end{theorem}
+
 \end{document}
