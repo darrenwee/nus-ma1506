@@ -1,0 +1,370 @@
+\documentclass[a4paper]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+
+% for flow chart
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\tikzstyle{block} = [rectangle, draw, 
+    text width=7em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+% for the laplace operator
+\DeclareMathOperator{\Lapl}{\mathcal{L}}
+
+% Set up remark environment with amsthm
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{solution}{Solution}
+\newtheorem*{definition}{Definition}
+\newtheorem{example}{Example}
+\theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}
+
+\title{\huge Linear Algebra}
+\author{Darren Wee\\\texttt{darren.wee@u.nus.edu}}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Matrices}
+\subsection{Introduction}
+A system of linear algebraic equations in two variables may look like
+
+\begin{align}
+	2x + 7y & = 3 \\
+	4x + 8y & = 11
+\end{align}
+
+This can be expressed as
+\begin{equation}
+	\begin{bmatrix}
+	2	& 7 \\
+	4 	& 8
+	\end{bmatrix}
+	\begin{bmatrix}
+	x	\\
+	y
+	\end{bmatrix}
+	= \begin{bmatrix}
+	3 \\
+	11
+	\end{bmatrix}
+\end{equation}
+
+Each element in a matrix can be described using coordinates, e.g. $(i,j)$.
+
+A vector is a special case of a matrix where it has only one row or one column.
+
+A matrix with only one row or one column is a scalar.
+
+\subsection{Matrix Operations}
+\subsubsection{Addition and Subtraction}
+For two matrices $X$ and $Y$ both with dimensions $m\times n$, the operation $X-Y$ or $X+Y$ implies element-by-element subtraction/addition respectively.
+
+\subsubsection{Scalar Multiplication}
+Scalar multiplication is also possible; for a scalar $k\in\mathbb{R}$,
+\begin{equation}
+	k
+	\begin{bmatrix}
+	a	& b \\
+	c	& d
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+	ak	& bk \\
+	ck 	& dk
+	\end{bmatrix}
+\end{equation}
+
+\subsubsection{Matrix Transposition}
+For each element $X$ at $(i,j)$, swap the positions of $X$ with its transposed element $Y$ at $(j, i)$.
+
+The transposition of matrix $A$ is denoted with $A^T$.
+
+\begin{equation}
+	\begin{bmatrix}
+	1	& 2 \\
+	4 	& 8
+	\end{bmatrix}^{T}
+	=
+	\begin{bmatrix}
+	1	& 4 \\
+	2	& 8
+	\end{bmatrix}
+\end{equation}
+
+It is trivial to see that the diagonal of the matrix is unaffected as $(i,j) = (j,i)$ along the diagonal since $i=j$.
+
+In the case of vector transposition, a row vector is transposed into a column vector.
+The converse is also true.
+
+\begin{theorem}
+	A matrix $A$ is said to be \emph{symmetrical} if
+	\begin{equation}
+		A^T = A
+	\end{equation}
+\end{theorem}
+
+\begin{theorem}
+	A matrix $A$ can be said to be \emph{anti-symmetric} if
+	\begin{equation}
+		A^T = -A
+	\end{equation}
+\end{theorem}
+
+\subsubsection{Matrix Multiplication}
+For two matrices $X$ and $Y$ with dimensions $m\times n$ and $n\times t$, the matrix product $XY$ results in a $m\times t$ matrix.
+
+\begin{equation}
+	\begin{bmatrix}
+	a_{11} & a_{12} \\
+	a_{21} & a_{22}
+	\end{bmatrix}
+	\begin{bmatrix}
+	b_{11} & b_{12} \\
+	b_{21} & b_{22}
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+	a_{11}b_{11} + a_{12}b_{21} & a_{11}b_{12} + a_{12}b_{22} \\
+	a_{21}b_{11} + a_{22}b_{21} & a_{21}b_{12} + a_{22}b_{22}
+	\end{bmatrix}
+\end{equation}
+
+Suppose the following:
+\begin{equation}
+	\begin{bmatrix}
+	a_{11}b_{11} + a_{12}b_{21} & a_{11}b_{12} + a_{12}b_{22} \\
+	a_{21}b_{11} + a_{22}b_{21} & a_{21}b_{12} + a_{22}b_{22}
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+	c_{11} & c_{12} \\
+	c_{21} & c_{22}
+	\end{bmatrix}
+\end{equation}
+
+In general, the following is true for all matrices of any arbitrary size
+\begin{equation}
+	c_{mn} = \sum_j a_{mj}b_{jn}
+\end{equation}
+
+Note that $XY \neq YX$ usually, unless both matrices $X$ and $Y$ are filled with the same values.
+
+In general, for matrices $A$ and $B$ of any time,
+\begin{equation}
+	(AB)^T = B^TA^T
+\end{equation}
+(don't forget to reverse the order of $B$ and $A$)
+
+\subsubsection{Scalar and Vector Product in Matrices}
+Suppose you are given two column vectors $\vec{u}$ and $\vec{v}$ in R$^3$.
+
+The dot product of $\vec{u}$ and $\vec{v}$ can be described as a matrix product,
+\begin{equation}
+	\vec{u}\cdot\vec{v} = \vec{u}^T\vec{v}
+\end{equation}
+
+Similarly, the length of a vector $\vec{u}$ can be given by
+\begin{equation}
+	|\vec{u}| = \sqrt{\vec{u}\cdot\vec{u}} = \sqrt{\vec{u}^T\vec{u}}
+\end{equation}
+
+Any vector in $\mathbf{R}^3$ can be used to define an anti-symmetrical $3\times 3$ matrix.
+\begin{equation}
+	\vec{u}
+	=
+	\begin{bmatrix}
+		u_1 \\
+		u_2 \\
+		u_3
+	\end{bmatrix}
+	\text{ defines }
+	\begin{bmatrix}
+		0	& -u_3	& u_2 \\
+		u_3	& 0		& -u_1 \\
+		-u_2& u_1 	& 0
+	\end{bmatrix}
+\end{equation}
+
+\subsubsection{Matrix Calculus}
+Calculus can be done on matrices as well.
+It is simple element-by-element integration/differentiation.
+The chain rule may be necessary depending on the variables inside the matrix and the variable of integration/differentiation.
+
+\subsection{Identity Matrix}
+The identity matrix is denoted by $I$ for any size $n\times n$.
+
+In $I$, the diagonal elements are always 1 with all other elements 0.
+
+For example, $I$ of size $2\times 2$ is given by
+$\begin{bmatrix}
+	1	& 0 \\
+	0	& 1
+\end{bmatrix}$
+
+\begin{theorem}
+	A matrix $B$ is said to be \emph{orthogonal} if
+	\begin{equation}
+	B^TB = I
+	\end{equation}
+\end{theorem}
+
+An example of an orthogonal matrix is $\begin{bmatrix} \cos{\theta} & \sin{\theta} \\ \sin{\theta} & -\cos{\theta}\end{bmatrix}$
+
+\section{Linear Transformations}
+\subsection{Introduction}
+A linear transformation is a rule that turns vectors into other vectors.
+
+Formally,
+\begin{theorem}
+	If $T$ is a linear transformation mapping $\mathbf{R}^n$ to $\mathbf{R}^m$, and $\vec{x}$ is an $n$-dimensional column vector, then
+	\begin{equation}
+	T(\vec{x}) = \mathbf{A}\vec{x}
+	\end{equation}
+	where $\mathbf{A}$ is known as the \emph{transformation matrix} of $T$.
+\end{theorem}
+
+\begin{example}
+	Suppose $T$ is a linear transformation that turns 3-dimensional vectors into 2-dimensional ones.
+	The rules of $T$ are as follows:
+	\begin{align}
+		T(\hat{i})	& = 2\hat{i} \\
+		T(\hat{j})	& = \hat{i} + \hat{j}\\
+		T(\hat{k})	& = \hat{i} - \hat{j}
+	\end{align}
+	
+	The transformation matrix of $T$ is thus given by
+	$\begin{bmatrix}
+		2 & 1 & 1 \\
+		0 & 1 & -1
+	\end{bmatrix}$
+
+\end{example}
+
+\subsubsection{Basic Properties}
+Suppose a linear transformation $T$, a scalar $c\in\mathbb{R}$ and vectors $\vec{u}$, $\vec{v}$.
+
+Then, the following equations are true:
+\begin{align}
+	T(c\vec{u}) 		& = cT(\vec{u}) \\
+	T(\vec{u}+\vec{v}) 	& = T(\vec{u}) + T(\vec{v})
+\end{align}
+
+A linear transformation is thus some mapping that preserves the operations of addition and scalar multiplication.
+
+\begin{example}
+	Suppose we know the following for some linear transformation $T$:
+	\begin{align}
+		T(\hat{i}) & = \hat{i} + \frac{1}{4}\hat{j}\\
+		T(\hat{j}) & = \frac{1}{4}\hat{i} + \hat{j}
+	\end{align}
+
+	We can calculate the linear transformation of some other vector easily.
+	\begin{align}
+		T(2\hat{i} + 3\hat{j}) 	& = 2T(\hat{i}) + 3T(\hat{j}) \\
+								& = 2(\hat{i} + \frac{1}{4}\hat{j}) + 3(\frac{1}{4}\hat{i} + \hat{j}) \\
+								& = \frac{11}{4}\hat{i} + \frac{7}{2}\hat{j}
+	\end{align}
+
+	This works because we know what the rule/mapping $T$ does to the basis of the vector space (in this case the basis is $\hat{i}$ and $\hat{j}$ since our vector is in $\mathbf{R}^2$).
+\end{example}
+
+\subsection{Identity Linear Transformation}
+\begin{theorem}
+	The linear identity transform $I$ is the rule
+	\begin{equation}
+		I\vec{u} = \vec{u}
+	\end{equation}
+	for all vectors $\vec{u}$.
+\end{theorem}
+
+
+\subsection{Applications of Simple Linear Transformations}
+\subsubsection{Shear Forces}
+Suppose you have a block of rubber and shear it.
+There is no change in volume but the top of the block shifts a distance $\tan{\theta}$ in the direction of the shear relative to the base.
+
+The shearing transformation $S$ can be thought of as
+\begin{align}
+	S(\hat{i}) 	& = \hat{i}\\
+	S(\hat{j}) 	& = \hat{i}\tan{\theta} + \hat{j} \\
+	S			& = \begin{bmatrix} 1 & \tan{\theta} \\ 0 & 1 \end{bmatrix}
+\end{align}
+
+\textbf{Shear does not add up linearly.}
+
+\begin{example}
+	Suppose you take a piece of rubber and shear it parallel to the $x$-axis by $\theta$ degrees, and then shear it again by $\phi$ degrees.
+	\begin{equation}
+		\begin{bmatrix}
+			1	& \tan{\phi} \\
+			0 	& 1
+		\end{bmatrix}
+		\begin{bmatrix}
+			1	& \tan{\phi} \\
+			0 	& 1
+		\end{bmatrix}
+		=
+		\begin{bmatrix}
+			1	& \tan{\phi} + \tan{\theta}\\
+			0 	& 1
+		\end{bmatrix}
+	\end{equation}
+\end{example}
+
+The shear angles $\theta$ and $\phi$ do not add up linearly.
+
+\subsubsection{Plane Rotations}
+Suppose you want to rotate an entire plane through an angle $\theta$ counter-clockwise.
+
+The rule for plane rotation $R$ can be defined as
+\begin{align}
+	R(\hat{i})	& = \hat{i}\cos{\theta} + \hat{j}\sin{\theta}\\
+	R(\hat{j}) 	& = -\hat{i}\sin{\theta} + \hat{j}\cos{\theta} \\
+	R(\theta) 	& = \begin{bmatrix} \cos{\theta} & -\sin{\theta} \\ \sin{\theta} & \cos{\theta} \end{bmatrix}
+\end{align}
+
+\subsection{Composite Transformations}
+The order of priority of composite transformations is left to right.
+
+It is necessary to ensure that the transformations on the right are able to take in the output of whatever transformation went before it as input.
+
+\begin{example}
+	Suppose the linear transformation $A$ eats vectors in $\mathbf{R}^3$ and spits out a vector in $\mathbf{R}^2$, while another linear transformation $B$ does the opposite\footnote{eats vectors in $\mathbf{R}^2$ and spits out a vector in $\mathbf{R}^3$}.
+	The composite transform $AB$ would thus not make sense, but $BA$ would be okay.
+\end{example}
+
+\begin{theorem}
+	Suppose $a_{ij}$ is the matrix of a linear transformation $A$ relative to $\hat{i}$, $\hat{j}$ and $\hat{k}$.
+	Suppose $b_{ij}$ is the matrix of a linear transformation $B$ relative to $\hat{i}$, $\hat{j}$ and $\hat{k}$.
+	And suppose that the composite transformation $AB$ is sensible.
+
+	Then the transformation matrix $AB$ relative to $\hat{i}$, $\hat{j}$ (and $\hat{k}$) is simply the matrix product of $a_{ij}$ and $b_{ij}$.
+\end{theorem}
+
+\subsection{Determinants}
+\begin{equation}
+	\det 
+	\begin{bmatrix}
+		a	& b \\
+		c	& d
+	\end{bmatrix}
+	=
+	\begin{vmatrix}
+		a & b \\
+		c & d
+	\end{vmatrix}
+	= ad - bc
+\end{equation}
+
+\begin{equation}
+	\begin{vmatrix}
+	a & b & c \\
+	d & e & f \\
+	h & l & m 
+	\end{vmatrix}
+\end{equation}
+\end{document}
